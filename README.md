@@ -1,3 +1,6 @@
+To Test
+- run npm i
+
 Adan Sandez Zavala
 
 UI Libs:
