@@ -8,7 +8,7 @@ UI Libs:
 - react-native-vector-icons
 - react-native-paper
 
-State Managment Libs:
+State Management Libs:
 - redux
 - redux-persist
 - @tanstack/react-query
