@@ -10,5 +10,7 @@ export const http = {
     post: async (route: string, params?: {}) => {
         const data = await axios.get(`${url}/${route}`, { params })
         return data.data
-    }
+    },
+    delete: () => {},
+    update: () => {}
 }

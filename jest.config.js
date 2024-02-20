@@ -1,3 +1,11 @@
 module.exports = {
-  preset: 'react-native',
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testMatch: ["**/__tests__/**/*.ts?(x)", "**/?(*.)+(test).ts?(x)"],
+  transform: {
+      "^.+\\.(js|ts)$": "ts-jest",
+  },
+  transformIgnorePatterns: [
+    "node_modules/(?!variables/.*)"
+  ]
 };

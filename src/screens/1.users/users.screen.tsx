@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { View, StyleSheet,Appearance, Text, FlatList, TouchableOpacity, Platform, Animated} from "react-native";
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Platform} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { useGetUSers } from "./query/users.query";
 import { RootStackParamList } from '../../stackNav';
@@ -17,14 +17,15 @@ import AppContainer from '../../components/container.componenet';
 import useTheme from '../../utils/theme';
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import FadeInView from '../../components/fadeInView.component';
-import { opacity } from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
-
+import { QueryClient, useQueryClient } from '@tanstack/react-query';
+import { search } from '../../utils/utils';
 
 const UsersScreen = () => {
     const {CustomModules} = NativeModules
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const {data, isPending, refetch} = useGetUSers()
     const [searchQuery, setSearchQuery] = useState('');
+    // const queryClient = new QueryClient()
     const [searchData, setSearchData] = useState<IUsers[]>([]);
     const dispatch = useAppDispatch()
     const {colors} = useTheme()
@@ -49,6 +50,7 @@ const UsersScreen = () => {
       navigation.setOptions({
         headerRight: () => (
           <View style={{flexDirection: 'row'}}>
+            {/* Touchable to clean local storage */}
             <TouchableOpacity style={{flexDirection: 'row'}} onPress={()=>{
                 handlePresentModalPress()
               }}>
@@ -79,18 +81,7 @@ const UsersScreen = () => {
 
     useEffect(() => {
       // if searchQuery then filter data array to search the information
-      if(searchQuery){
-        const filter = data?.filter((item) => {
-          return item.name.includes(searchQuery)
-        })
-        if(filter){
-          setSearchData(filter)
-        } else {
-          setSearchData([])
-        }
-      } else {
-        setSearchData(data || [])
-      }
+      setSearchData(search(searchQuery, data || []))
     }, [searchQuery])
 
     // if loading 

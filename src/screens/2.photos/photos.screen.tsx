@@ -1,6 +1,6 @@
 import { FlatList, TouchableOpacity, Image, Text} from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { RootStackParamList } from "../../stackNav";
 import { useGetAlbumPhotos, useGetAllAlbumPhotos } from "./query/photos.query";
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -14,6 +14,7 @@ const PhotosScreen: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, "Photos">>();
   const {name, id} = route.params?.item
   const {colors} = useTheme()
+  const flatListRef = useRef<any>()
   const [isAllPhotos, setIsAllPhotos] = useState(false)
   const [data, setData] = useState<IPhotosResponse[]>([])
   const {data: photos, isPending: photosIsprending, error: errorPhotos} = useGetAlbumPhotos(id)
@@ -25,7 +26,7 @@ const PhotosScreen: React.FC = () => {
       title: isAllPhotos ? 'All Photos' : name,
       headerRight: () => (
         <TouchableOpacity onPress={()=>{
-          console.log("press star")
+          flatListRef?.current?.scrollToIndex({index: 0});
           setIsAllPhotos(!isAllPhotos)
         }}>
           <Icon name={isAllPhotos ? "star": "staro"} color={colors.text} size={20} style={{marginRight: 10}}/>
@@ -65,6 +66,7 @@ const PhotosScreen: React.FC = () => {
     <AppContainer>
       <FadeInView viewStyle={{flex: 1}}>
           <FlatList
+            ref={flatListRef}
             data={data}
             keyExtractor={(item)=>item.id.toString()}
             numColumns={3}
@@ -74,8 +76,8 @@ const PhotosScreen: React.FC = () => {
             scrollIndicatorInsets={{ right: 1 }}
             removeClippedSubviews={true}
             renderItem={({item}) => 
-              <TouchableOpacity style={{flex: 1}}>
-                <Image source={{uri: item.thumbnailUrl}} style={{width: '100%'}} height={150}/>
+              <TouchableOpacity style={{width: '33%'}}>
+                <Image source={{uri: item.thumbnailUrl}} height={150}/>
               </TouchableOpacity>
             }
           />

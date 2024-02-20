@@ -1,12 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from './store'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 // Define a type for the slice state
-
-
 interface Deleted {
     [key: string]: {
         items: number[]
@@ -24,7 +19,7 @@ const initialState: DeletedItems = {
 }
 
 export const albumSlice = createSlice({
-  name: 'counter',
+  name: 'albums',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
